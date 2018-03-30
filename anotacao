@@ -1,0 +1,12 @@
+
+Uma thread para escrever e enviar e outra thread para receber a leitura do outro lado
+
+Procurar Classes Runnable ou "extends Thread"{
+
+	Criar classe SocketChat (Criar laços para que essas threads fiquem rodando indefinidamente)
+}
+
+Utilizar metodo start ao invés de run
+
+
+
