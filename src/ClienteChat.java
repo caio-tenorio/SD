@@ -17,9 +17,13 @@ public class ClienteChat {
 			out = new PrintWriter(echoSocket.getOutputStream(), true);
 			in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
 			
-			SocketChat socketChat = new SocketChat(in, out);
+			SocketChat socketChat = new SocketChat(in, out, echoSocket);
 			Thread socketChatThread = new Thread (socketChat);
 			socketChatThread.start();
+			
+			SocketChatWriting socketChatWriting = new SocketChatWriting(in, out, echoSocket, "client");
+			Thread socketChatThreadWriting = new Thread (socketChatWriting);
+			socketChatThreadWriting.start();
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -28,19 +32,19 @@ public class ClienteChat {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		try {
-			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-
-			String userInput;
-
-			System.out.println(in.readLine());
-			while ((userInput = stdIn.readLine()) != null) {
-
-				out.println(userInput);
-//				System.out.println(in.readLine());
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+//
+//			String userInput;
+//
+//			System.out.println(in.readLine());
+//			while ((userInput = stdIn.readLine()) != null) {
+//
+//				out.println(userInput);
+////				System.out.println(in.readLine());
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
