@@ -77,6 +77,9 @@ public class Server {
 						try{
 							input = in.readLine();
 							System.out.println(input);
+							for(ConnectionToClient client : clients) {
+								client.out.println(input);
+							}
 						} catch(IOException e){
 							e.printStackTrace(); 
 						}
@@ -85,27 +88,7 @@ public class Server {
 				}
 			};
 
-//			Thread write = new Thread(){
-//				public void run(){
-//					BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-//					String serverInput = null;
-//					do {
-//						try{
-//							serverInput = stdIn.readLine();
-//							for(ConnectionToClient client : clients) {
-//								client.out.println(serverInput);
-//							}
-//						} catch(IOException e){ 
-//							e.printStackTrace(); 
-//						}
-//					} while (serverInput != null);
-//				}
-//			};
-
-			//			read.setDaemon(true);
 			read.start();
-			//			write.setDaemon(true);
-//			write.start();
 		}
 
 	}

@@ -5,24 +5,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class Client {
 	private ConnectionToServer server;
 	private Socket echoSocket;
+	private String userName;
 
-	public Client(String IPAddress, int port) throws IOException{
+	public Client(String IPAddress, int port, String userName) throws IOException{
 		echoSocket = new Socket (IPAddress, port);
-		server = new ConnectionToServer(echoSocket);
-
+		this.userName = userName;
+		server = new ConnectionToServer(echoSocket, userName);
 	}
 
 	private class ConnectionToServer {
 		PrintWriter out;
 		BufferedReader in;
 		Socket echoSocket;
+		String userName;
 
-		ConnectionToServer(Socket echoSocket) throws IOException {
+		ConnectionToServer(Socket echoSocket, String userName) throws IOException {
 			this.echoSocket = echoSocket;
+			this.userName = userName;
 			in = new BufferedReader(new InputStreamReader(this.echoSocket.getInputStream()));
 			out = new PrintWriter(this.echoSocket.getOutputStream(), true);
 
@@ -47,7 +51,7 @@ public class Client {
 					do {
 						try{
 							clientInput = stdIn.readLine();
-							out.println(clientInput);
+							out.println(userName + ": " + clientInput);
 						} catch(IOException e){
 							e.printStackTrace();
 						}
@@ -55,15 +59,16 @@ public class Client {
 				}
 			};
 
-			//			read.setDaemon(true);
 			read.start();
-			//			write.setDaemon(true);
 			write.start();
 		}
 	}
 
 	public static void main(String[] args) throws IOException {
-		Client client = new Client ("127.0.0.1", 9090);
-
+		System.out.println("Digite o nome do seu usuário:");
+		Scanner userNameInput = new Scanner(System.in);
+		String userName = userNameInput.nextLine();
+		Client client = new Client ("127.0.0.1", 9090, userName);
+		System.out.println("Você está conectado como " + userName + "!");
 	}
 }
